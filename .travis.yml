@@ -1,22 +1,25 @@
-sudo: yes
+sudo: true
 language: java
 cache:
   directories:
-    - .autoconf
-    - $HOME/.m2
+  - ".autoconf"
+  - "$HOME/.m2"
 services:
-  - docker
+- docker
 jdk:
-  - openjdk8
+- openjdk8
 branches:
   only:
-    - master
+  - master
 before_install:
-  - mkdir -p ~/.m2; wget -q -O ~/.m2/settings.xml https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/travis_maven_settings.xml
-  - cd $TRAVIS_BUILD_DIR
+- mkdir -p ~/.m2; wget -q -O ~/.m2/settings.xml https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/travis_maven_settings.xml
+- cd $TRAVIS_BUILD_DIR
 script:
-  - "[ \"${TRAVIS_PULL_REQUEST}\" = \"false\" ] && mvn -P travis clean deploy || mvn -P travis clean install"
+- '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && mvn -P travis clean deploy || mvn -P
+  travis clean install'
 after_success:
-  - mvn coveralls:report
+- mvn coveralls:report
 env:
   global:
+  - secure: xkS1l09FktnpxWia/J26Zpjf/sOyESbT49Gi86aUy+P9kyYEdqjnsxxQaYLlsnHDjS+II/xaLNVI9vGpje1M3a4oTTRU1/0G0YS1Kms2WujPw4Nip5J3JTdbyzwpZKSSjmtSdunJBmbKNvqIoljmf2/68X4y16OeKa2VhhmWKTxnMDEp9xxeDfzPUT4BaDiJp9GyDGYVm26JXlyg6mTNlBaRzPWt0soLQpBm1TUi7TIgmvKFhRb8z6vxhbMyTJ9XqxY2dOKhjE2erwU33HPPGVOvT+ziMrb13WYDKHp3el42CVX1D6FT4bMAQWhjNPONJz9jVI1S2C7ZA8zaGBHb+1IHmISzIsjLTrbuciaxghuf6rlod6ReVxuMWUfUI/utQPGfF90Dz71OdmyXSe3shQz4XXL0u7HiM9wY5jocHb8C3fTLYyeUT+eW1uWnLTVoUPdoOx2ZOIEF/sl8kTUsuNiVIyh4S88WbyhFRRLQkP/Bfm2K4H/S7HUSnGEbTPalkb7hnThEdfeSonruU7x1pkiSECNIMG0fV7GMNAo8FLIDV3TngCaM0FsSEZOO5O+LD03d1KWVTVzQ7hhauGkbS2ZgPQrBr6ieBXiv5lt3WSFpZKXaK58ssyBZrDQFDWdCLOQ4z1IefLSLAKrTIU0ZvPXhdNI5CUcx2Yux2CqQ4g8=
+  - secure: RWzBDan9+YZVzq/kxe5OlBUp3zfWsE4jLtIP+avqArs7865be9C4Thmt0QmVB/oab3obQ2bxF86BfaSMAjBTc7nYWBGn/3DHwKdYigUmGJx9AI3soyyXFeN9PkI/IfkDZueXSZl5M086vmu5zkAabgMZR9xKs0OECBP5yaeRsHrUV6ddZ8p9jvhdWwxSvIWWGvmlYuwi7qAuHcySbEn861nRC16AkcAcCgeliNkwp9hQ0FvsOu4RZtVQuzvc+Bt2GJNKNDTmcoNsBbp+kd+iTgiUj5grdXr8XaBYxpaFnlBvBXyYkzVqahRfZnnuRMaacd7WHPONRUtBMVU88rkNutshSFeHsZPxmedJwFRNzcJSBsMySibXOogcfHkDLLVoQ/sTshMiyr7nEH6pXlLhZiqPij1ejk+9uYh3tttqu6dIqw7i+Rbs8o4g0GQhE/3qY838nfSt8HmCavOZ3lCe04sr26zUKcToljPl1Cquqwh9DYxjr2x/c/FX/87DeFOVhKvFIIlhaLRVPyNC4vREnLNLOfG/0FM8IqwKF/8v0PNC2dN/RwIJ7+eoRrSyh1weWT0qrfbI+8bSKTcr05KPGFQw+LxQ4vD2L81+yxgXDGiclnSgGeX6c/C+w56uf5eyrnMctfBLUdTOg0QETmHi8w21AcYbHC58qS9tmtVxCRs=

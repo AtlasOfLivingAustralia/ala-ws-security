@@ -26,7 +26,7 @@ class AlaRoleMapper implements GrantedAuthoritiesMapper {
         Set<GrantedAuthority> roles = new HashSet();
         authorities.stream().forEach( it -> {
             if (it instanceof OAuth2UserAuthority) {
-                mapOAuth2UserAuthority((OAuth2UserAuthority)it, roles);
+                mapOAuth2UserAuthority((OAuth2UserAuthority) it, roles);
             } else {
                 log.warn("Mapper encountered an authority not of type OAuth2UserAuthority!");
                 roles.add(it);
