@@ -224,6 +224,36 @@ public class AlaWebServiceAuthFilterTest {
     }
 
 
+    @Test
+    public void testWhiteList() throws Exception {
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addParameter("apiKey", "Valid API Key");
+        request.addParameter(AlaWebServiceAuthFilter.USER_ID_REQUEST_PARAM, "19");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockFilterChain filterChain = new MockFilterChain();
+
+        SecurityContextHolder.setContext(securityContext);
+
+        AuthenticatedUser apiUser = new AuthenticatedUser();
+        apiUser.setUserId("000000");
+        AuthenticatedUser actualUser = new AuthenticatedUser();
+        actualUser.setUserId("19");
+
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(legacyApiKeyService.isValidKey(any()))
+                .thenReturn(Optional.of(apiUser));
+        when(legacyApiKeyService.lookupAuthUser(anyString(), anyBoolean()))
+                .thenReturn(Optional.of(actualUser));
+
+        alaWebServiceAuthFilter.doFilterInternal(request, response, filterChain);
+
+        ArgumentCaptor<PreAuthenticatedAuthenticationToken> argument = ArgumentCaptor.forClass(PreAuthenticatedAuthenticationToken.class);
+        verify(securityContext).setAuthentication(argument.capture());
+
+        PreAuthenticatedAuthenticationToken token = argument.getValue();
+        assertEquals("19", ((AuthenticatedUser) token.getPrincipal()).userId);
+    }
 
 }
 
