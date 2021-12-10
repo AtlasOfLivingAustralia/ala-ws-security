@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@interface RequireAuth {
+public @interface RequireAuth {
 
     /**
      * List of roles or configuration properties that point to roles.
