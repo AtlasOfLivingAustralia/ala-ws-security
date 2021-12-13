@@ -162,6 +162,32 @@ public class AlaWebServiceAuthFilterTest {
     }
 
     @Test
+    public void testValidApiKeyAndInvalidUserId() throws Exception {
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("apiKey", "Valid API Key");
+        request.addHeader(LEGACY_X_ALA_USER_ID_HEADER, "19");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockFilterChain filterChain = new MockFilterChain();
+
+        SecurityContextHolder.setContext(securityContext);
+
+        AuthenticatedUser apiUser = new AuthenticatedUser();
+        apiUser.setUserId("000000");
+
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(legacyApiKeyService.isValidKey(any()))
+                .thenReturn(Optional.of(apiUser));
+        when(legacyApiKeyService.lookupAuthUser(anyString(), anyBoolean()))
+                .thenReturn(Optional.empty());
+
+        alaWebServiceAuthFilter.doFilterInternal(request, response, filterChain);
+
+        ArgumentCaptor<PreAuthenticatedAuthenticationToken> argument = ArgumentCaptor.forClass(PreAuthenticatedAuthenticationToken.class);
+        verifyNoInteractions(securityContext);
+    }
+
+    @Test
     public void testValidApiKeyAndUserIdParam() throws Exception {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -223,6 +249,30 @@ public class AlaWebServiceAuthFilterTest {
         assertEquals("19", ((AuthenticatedUser) token.getPrincipal()).userId);
     }
 
+    @Test
+    public void testValidApiKeyParamAndInvalidUserIdParam() throws Exception {
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addParameter("apiKey", "Valid API Key");
+        request.addParameter(AlaWebServiceAuthFilter.USER_ID_REQUEST_PARAM, "19");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockFilterChain filterChain = new MockFilterChain();
+
+        SecurityContextHolder.setContext(securityContext);
+
+        AuthenticatedUser apiUser = new AuthenticatedUser();
+        apiUser.setUserId("000000");
+
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(legacyApiKeyService.isValidKey(any()))
+                .thenReturn(Optional.of(apiUser));
+        when(legacyApiKeyService.lookupAuthUser(anyString(), anyBoolean()))
+                .thenReturn(Optional.empty());
+
+        alaWebServiceAuthFilter.doFilterInternal(request, response, filterChain);
+
+        verifyNoInteractions(securityContext);
+    }
 
     @Test
     public void testWhiteList() throws Exception {
