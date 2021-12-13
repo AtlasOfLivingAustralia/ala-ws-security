@@ -29,8 +29,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -49,6 +48,12 @@ public class JwtServiceTest {
         String generatedJWT = generateTestJwt(false);
         Optional<AuthenticatedUser> result = jwtService.checkJWT("Bearer " + generatedJWT);
         assertTrue(result.isPresent());
+
+        assertEquals("test@test.com", result.get().getEmail());
+        assertEquals("99999999", result.get().getUserId());
+        assertEquals("test_firstname", result.get().getFirstName());
+        assertEquals("test_lastname", result.get().getLastName());
+        assertEquals(1, result.get().getRoles().size());
     }
 
     @Test
