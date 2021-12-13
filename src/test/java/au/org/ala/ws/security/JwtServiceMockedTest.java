@@ -18,6 +18,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.security.KeyFactory;
@@ -47,7 +49,7 @@ public class JwtServiceMockedTest {
     }
 
     @Test
-    public void testJWTVerifyFails() throws Exception {
+    public void testJWTSignatureVerificatioFails() throws Exception {
         String generatedJWT = JwtServiceTest.generateTestJwt(false);
         PowerMockito.mockStatic(JwtUtils.class);
         given(JwtUtils.verify(any(), any())).willThrow(new SignatureVerificationException(null));
@@ -55,4 +57,12 @@ public class JwtServiceMockedTest {
         assertFalse(o.isPresent());
     }
 
+    @Test
+    public void testJWTVerifyFails() throws Exception {
+        String generatedJWT = JwtServiceTest.generateTestJwt(false);
+        PowerMockito.mockStatic(JwtUtils.class);
+        given(JwtUtils.verify(any(), any())).willThrow(new RuntimeException("test"));
+        Optional<AuthenticatedUser> o = jwtService.checkJWT("Bearer " + generatedJWT);
+        assertFalse(o.isPresent());
+    }
 }
