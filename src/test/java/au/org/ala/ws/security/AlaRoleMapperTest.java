@@ -66,4 +66,18 @@ public class AlaRoleMapperTest {
         assertFalse(mapped.isEmpty());
         assertEquals(2, mapped.size());
     }
+
+//    @Test
+//    public void testOIDCMapping() throws Exception {
+//        AlaRoleMapper mapper = new AlaRoleMapper();
+//        Collection<OAuth2UserAuthority> authorities = new ArrayList<>();
+//        authorities.add(new OidcUserAuthority(new HashMap<String, Object>(){{
+//            put("authority", "ROLE_ADMIN,ROLE_NUMBER2");
+//        }}));
+//
+//        Collection<? extends GrantedAuthority> mapped = mapper.mapAuthorities(authorities);
+//        assertNotNull(mapped);
+//        assertFalse(mapped.isEmpty());
+//        assertEquals(2, mapped.size());
+//    }
 }

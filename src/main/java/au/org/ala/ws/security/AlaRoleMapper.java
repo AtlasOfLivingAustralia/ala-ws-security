@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 
 import java.util.*;
@@ -28,6 +29,8 @@ class AlaRoleMapper implements GrantedAuthoritiesMapper {
         authorities.stream().forEach( it -> {
             if (it instanceof OAuth2UserAuthority) {
                 mapOAuth2UserAuthority((OAuth2UserAuthority) it, roles);
+//            } else if (it instanceof OidcUserAuthority) {
+//                mapOidcUserAuthority((OidcUserAuthority) it, roles);
             } else {
                 log.warn("Mapper encountered an authority not of type OAuth2UserAuthority!");
                 roles.add(it);
@@ -35,6 +38,23 @@ class AlaRoleMapper implements GrantedAuthoritiesMapper {
         });
         return roles;
     }
+
+//    private void mapOidcUserAuthority(OidcUserAuthority authority, Set roles) {
+//        if (authority.getUserInfo() != null && authority.getUserInfo().getClaims() != null) {
+//            Object authorityAttribute = authority.getUserInfo().getClaims().get("authority");
+//            if (log.isDebugEnabled()) {
+//                log.debug("Mapping authority: ${authority.toString()} with authority ${authority.getAuthority()} with attribute: ${authorityAttribute}");
+//            }
+//            if (authorityAttribute != null && authorityAttribute instanceof String) {
+//                Arrays.stream(((String) authorityAttribute).split(",")).forEach(role ->
+//                        roles.add(new SimpleGrantedAuthority(role))
+//                );
+//            } else {
+//                log.warn("The OAuth2UserAuthority didn't have an authority attribute we could map.");
+//                roles.add(authority);
+//            }
+//        }
+//    }
 
     private void mapOAuth2UserAuthority(OAuth2UserAuthority authority, Set roles) {
         Object authorityAttribute = authority.getAttributes().get("authority");

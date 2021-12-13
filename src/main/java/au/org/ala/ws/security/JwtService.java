@@ -51,10 +51,9 @@ public class JwtService {
             JwkProvider provider = new UrlJwkProvider(new URL(jwkUrl));
             String keyId = jwt.getKeyId();
             Jwk jwk = provider.get(keyId);
-            Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
 
             try {
-                algorithm.verify(jwt);
+                JwtUtils.verify((RSAPublicKey) jwk.getPublicKey(), jwt);
                 // check the expiry....
                 if (jwt.getExpiresAt().before(new Date())){
                     log.error("JWT expired");
