@@ -8,6 +8,8 @@ import java.security.interfaces.RSAPublicKey;
 
 public final class JwtUtils {
 
+    private JwtUtils(){}
+
     public static boolean verify(RSAPublicKey publicKey, DecodedJWT jwt) throws SignatureVerificationException {
         Algorithm algorithm = Algorithm.RSA256(publicKey, null);
         algorithm.verify(jwt);
