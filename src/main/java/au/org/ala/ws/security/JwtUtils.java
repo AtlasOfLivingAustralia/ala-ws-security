@@ -6,7 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.security.interfaces.RSAPublicKey;
 
-public class JwtUtils {
+public final class JwtUtils {
 
     public static boolean verify(RSAPublicKey publicKey, DecodedJWT jwt) throws SignatureVerificationException {
         Algorithm algorithm = Algorithm.RSA256(publicKey, null);
