@@ -49,6 +49,7 @@ public class JwtServiceTest {
         Optional<AuthenticatedUser> result = jwtService.checkJWT("Bearer " + generatedJWT);
         assertTrue(result.isPresent());
 
+        assertEquals("test@test.com", result.get().getName());
         assertEquals("test@test.com", result.get().getEmail());
         assertEquals("99999999", result.get().getUserId());
         assertEquals("test_firstname", result.get().getFirstName());
