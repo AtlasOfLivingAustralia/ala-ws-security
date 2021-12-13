@@ -7,10 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Converts a single Authority containing an attribute "authority" with a comma separated list of roles into
@@ -22,6 +19,10 @@ class AlaRoleMapper implements GrantedAuthoritiesMapper {
 
     @Override
     public Collection<? extends GrantedAuthority> mapAuthorities(Collection<? extends GrantedAuthority> authorities) {
+
+        if (authorities == null){
+            return Collections.emptyList();
+        }
 
         Set<GrantedAuthority> roles = new HashSet();
         authorities.stream().forEach( it -> {
