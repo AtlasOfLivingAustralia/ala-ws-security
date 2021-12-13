@@ -34,8 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(JwtUtils.class)
 public class JwtServiceTest {
 
     @InjectMocks
@@ -44,15 +42,6 @@ public class JwtServiceTest {
     @Before
     public void setup() throws Exception {
         jwtService.jwkUrl = getJwkUrl().toString();
-    }
-
-    @Test
-    public void testJWTVerifyFails() throws Exception {
-        String generatedJWT = generateTestJwt(false);
-        PowerMockito.mockStatic(JwtUtils.class);
-        given(JwtUtils.verify(any(), any())).willThrow(new SignatureVerificationException(null));
-        Optional<AuthenticatedUser> o = jwtService.checkJWT("Bearer " + generatedJWT);
-        assertFalse(o.isPresent());
     }
 
     @Test
@@ -81,14 +70,14 @@ public class JwtServiceTest {
         assertFalse(result.isPresent());
     }
 
-    static URL getJwkUrl() throws Exception {
+    public static URL getJwkUrl() throws Exception {
         File tempFile = File.createTempFile("test-jwk-", ".jwks");
         FileUtils.writeStringToFile(tempFile, TEST_JWK, "UTF-8");
         URL jwkUrl = tempFile.toURI().toURL();
         return jwkUrl;
     }
 
-    String generateTestJwt(boolean expired) throws Exception {
+    public static String generateTestJwt(boolean expired) throws Exception {
         try {
 
             String keyId = "x5NlU73k1xGmmchGMKfQBEqaKUfWhlMTS8OROillD40";
@@ -139,7 +128,7 @@ public class JwtServiceTest {
      * For details of magic strings below see: https://tools.ietf.org/html/rfc7518#section-6.3
      * @return
      */
-    RSAPrivateKey getPrivateKey() throws Exception {
+    public static RSAPrivateKey getPrivateKey() throws Exception {
 
         try {
             Map<String, List<Map<String, Object>>> keys = new ObjectMapper().readValue(TEST_JWK, Map.class);
@@ -174,7 +163,7 @@ public class JwtServiceTest {
         }
     }
 
-    private BigInteger getValues(Map<String, Object> additionalAttributes, String key) {
+    private static BigInteger getValues(Map<String, Object> additionalAttributes, String key) {
         return new BigInteger(1, Base64.getUrlDecoder().decode((String) additionalAttributes.get(key)));
     }
 
